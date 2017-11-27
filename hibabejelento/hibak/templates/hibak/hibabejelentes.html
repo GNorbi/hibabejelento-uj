@@ -1,0 +1,36 @@
+﻿{% extends "base_generic.html" %}
+
+{% block content %}
+    <div class="w3-container w3-padding-16">
+        <form class="w3-container w3-card-2 w3-light-grey" action="" method="post">
+            {% csrf_token %}
+            <h1 class="w3-container w3-wide w3-center w3-text-blue">Hibabejelentés</h1>
+            {{ form.non_field_errors }}
+            <div class="w3-padding-24">
+                <label class="w3-text-blue" for="{{ form.nev.id_for_label }}">Név:</label>
+                <input class="w3-input" type="text" name="nev">
+                <div>Adja meg a hiba bejelentő nevét</div>
+                <div class="w3-text-red">{{ form.nev.errors }}</div>
+            </div>
+            <div class="w3-padding-24">
+                <label class="w3-text-blue" for="{{ form.cim.id_for_label }}">Cím:</label>
+                <input class="w3-input" type="text" name="cim">
+                <div>Adja meg a hiba címét</div>
+                <div class="w3-text-red"> {{ form.cim.errors }}</div>
+                </div>
+            <div class="w3-padding-24">
+                <label class="w3-text-blue" for="{{ form.kapcsolattarto_email.id_for_label }}">Kapcsolattartó email:</label>
+                <input class="w3-input" type="text" name="kapcsolattarto_email">
+                <div>Ezen az emailen lesz tájékoztatva a hibajavításról</div>
+                <div class="w3-text-red">{{ form.kapcsolattarto_email.errors }}</div>
+            </div>
+            <div class="w3-padding-24">
+                <label class="w3-text-blue" for="{{ form.leiras.id_for_label }}">Leírás:</label>
+                <input class="w3-input" type="text" name="leiras">
+                <div>Adja meg a hiba leírását</div>
+                <div class="w3-text-red">{{ form.leiras.errors }}</div>
+            </div>
+            <div class="w3-padding-24"><input class="w3-btn w3-blue" type="submit" value="Hiba bekuldese" /> </div>
+        </form>
+    </div>
+    {% endblock %}

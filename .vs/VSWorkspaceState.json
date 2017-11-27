@@ -1,0 +1,15 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\hibabejelento",
+    "\\hibabejelento\\hibabejelento",
+    "\\hibabejelento\\hibak",
+    "\\hibabejelento\\hibak\\static",
+    "\\hibabejelento\\hibak\\templates",
+    "\\hibabejelento\\hibak\\templates\\hibak",
+    "\\hibabejelento\\templates",
+    "\\hibabejelento\\templates\\registration"
+  ],
+  "SelectedNode": "\\hibabejelento\\hibabejelento\\settings.py",
+  "PreviewInSolutionExplorer": false
+}

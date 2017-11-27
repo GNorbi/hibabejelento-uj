@@ -1,0 +1,93 @@
+﻿{% extends "base_generic.html" %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+    {% if hiba_list %}
+        <h1 class="w3-wide w3-center">Hibabejelentesek</h1>
+        <form method="GET" action="" id="searchform">
+            <input id="searchbox" name="search" type="number" value="{{ request.GET.search }}" placeholder="Keresés" />
+        </form>
+        <a href="{% url 'export_hibak_csv' %}">Hibák exportálása</a>
+    {% for hiba in hiba_list reversed %}
+    <div class="w3-container w3-padding-16">
+        <div class="w3-card-4">
+            {% if hiba.statusz == 'f' %}
+                <header class="w3-container w3-red">
+            {% elif hiba.statusz == 'g' or hiba.statusz == 'h' or hiba.statusz == 'i' %}
+                <header class="w3-container w3-yellow">
+            {% else %}
+                <header class="w3-container w3-green">
+            {% endif %}
+                <h3 class="w3-center w3-wide">Azonosító: <b class="w3-text-black w3-xxlarge">{{ hiba.id }}</b></h3>
+                <h3 class="w3-center w3-wide">Kapcsolattartó email címe: {{ hiba.kapcsolattarto_email }}</h3>
+                <h3 class="w3-center w3-wide">Keletkezett hiba címe: {{ hiba.cim }}</h3>
+                <h3 class="w3-wide">Bejelentés dátuma: {{ hiba.bejelentes_datuma }}</h3>
+            </header>
+
+            <div class="w3-container w3-padding-16">
+                <p>{{ hiba.leiras }}</p>
+            </div>
+
+            {% for visszajelzes in visszajelzesek %}
+            {% if visszajelzes.hiba == hiba %}
+            <div class="w3-container w3-padding-16 w3-orange">
+                <h3 class="">{{ visszajelzes.datum }}</h3>
+                <p class="">{{ visszajelzes.uzenet }}</p>
+            </div>
+            {% endif %}
+            {% endfor %}
+
+            {% if hiba.statusz == 'f' %}
+                <footer class="w3-red">
+            {% elif hiba.statusz == 'g' or hiba.statusz == 'h' or hiba.statusz == 'i' %}
+                <footer class="w3-yellow">
+            {% else %}
+                <footer class="w3-green">
+            {% endif %}
+            {% if hiba.statusz == 'f' %}
+                <button class="w3-button w3-red w3-xlarge" style="width:100%" onclick="myFunction({{hiba.id}})">Állapottörténet megtekintése <span class="w3-right w3-text-black" style="text-align: right;">{{hiba.allapotvaltozasok_szama}} </span></button>
+            {% elif hiba.statusz == 'g' or hiba.statusz == 'h' or hiba.statusz == 'i' %}
+                <button class="w3-button w3-yellow w3-xlarge" style="width:100%" onclick="myFunction({{hiba.id}})">Állapottörténet megtekintése <span class="w3-right w3-text-black" style="text-align: right;">{{hiba.allapotvaltozasok_szama}} </span></button>
+            {% else %}
+                <button class="w3-button w3-green w3-xlarge" style="width:100%" onclick="myFunction({{hiba.id}})">Állapottörténet megtekintése <span class="w3-right w3-text-black" style="text-align: right;">{{hiba.allapotvaltozasok_szama}} </span></button>
+            {% endif %}
+            <div id="{{hiba.id}}" class="w3-container" style="display:none">
+                <div class="w3-container">
+                    {% for allapotvaltozas in allapotvaltozasok %}
+                    {% if allapotvaltozas.hiba == hiba %}
+                        {% if allapotvaltozas.uj_statusz == 'g' %}
+                        <div class="w3-padding-16">{{ allapotvaltozas.valtozas_datuma }} - Hibajavítás folyamatba helyezve</div>
+                        {% elif allapotvaltozas.uj_statusz == 'h' %}
+                        <div class="w3-padding-16">{{ allapotvaltozas.valtozas_datuma }} - Hibajavítás azonnal nem lehetséges, ajánlatkészítés folyamatban</div>
+                        {% elif allapotvaltozas.uj_statusz == 'i' %}
+                        <div class="w3-padding-16">{{ allapotvaltozas.valtozas_datuma }} - Hibajavítás azonnal nem lehetséges, alkatrészre vár</div>
+                        {% else %}
+                        <div class="w3-padding-16">{{ allapotvaltozas.valtozas_datuma }} - A hiba javítása elkészült</div>
+                        {% endif %}
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+
+                <script>
+                function myFunction(id) {
+                    var x = document.getElementById(id);
+                    if (x.style.display === 'none') {
+                        x.style.display = 'block';
+                    } else {
+                        x.style.display = 'none';
+                    }
+                }
+                </script>
+            </footer>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+        <p>Nincsennek hibabejelentesek!</p>
+    {% endif %}
+    {% else %}
+        <h1>Bejelentkezes szukseges!</h1>
+    {% endif %}
+{% endblock %}
