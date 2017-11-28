@@ -199,7 +199,7 @@ def export_hibak_csv(request):
             if vissz.hiba.id == row[0]:
                 row_num += 1
                 db+=1
-                ws.write(row_num, 1, str(vissz.hiba.id).encode('UTF-8') + " / Visszajelzés " + str(db).encode('UTF-8'), font_style)
+                ws.write(row_num, 1, str(vissz.hiba.id) + " / Visszajelzés " + str(db), font_style)
                 ws.write(row_num, 2, vissz.uzenet, font_style)
                 ws.write(row_num, 3, str(vissz.datum.astimezone(time_zone).strftime('%Y-%m-%d %H:%M')), font_style)
 

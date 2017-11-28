@@ -124,9 +124,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL= '/static/'
 
-STATIC_ROOT = '/opt/bitnami/apps/django/django_projects/hibabejelento/hibak/static'
+STATIC_ROOT = '/home/epuzbaukft/hibabejelento-uj/hibak/static/'
+
 
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
 LOGIN_REDIRECT_URL = '/hibak'

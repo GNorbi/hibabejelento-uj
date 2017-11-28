@@ -20,16 +20,16 @@ class Hiba(models.Model):
     	)
 	statusz = models.CharField(max_length=1, choices=hiba_allapot, blank=True, default='f', help_text='Hiba Allapot')
 	allapotvaltozasok_szama = models.PositiveSmallIntegerField(default=0)
-	
+
 	class Meta:
         	verbose_name = 'Hibák'
-        	verbose_name_plural = 'Hibák'	
-	
+        	verbose_name_plural = 'Hibák'
+
 	def __str__(self):
 		"""
 		String for representing the Model object.
 		"""
-		return str(self.id).encode('UTF-8') + " - " + (self.nev).encode('UTF-8') + " - " + (self.cim).encode('UTF-8') 
+		return str(self.id) + " - " + str(self.nev) + " - " + str(self.cim)
 
 	def __init__(self, *args, **kwargs):
 		super(Hiba, self).__init__(*args, **kwargs)
@@ -40,9 +40,9 @@ class Hiba(models.Model):
 		masodik = "A "
 		harmadik = " sorszámon bejelentett hiba állapota  megváltozott, megtekintheti  www.kincstarhibabejelento.hu webcímen üzemelő hibabejelentő felületen. Ez egy automatikus üzenet, kérjük erre ne válaszoljon.  Tisztelettel: Ép-Üz-Bau Kft"
 		sorszamu = " sorszámú hiba állapota megváltozott"
-		
+
 		if self.statusz != self.__original_statusz:
-			send_mail(str(self.id).decode('utf-8') + elso.decode('utf-8'),masodik.decode('utf-8') + str(self.id).decode('utf-8') + harmadik.decode('utf-8'), str(self.id).decode('utf-8') + " " + sorszamu.decode('utf-8') + ' <tesztemailepuzbau@gmail.com>',[self.kapcsolattarto_email],fail_silently=False,)
+			send_mail(str(self.id) + elso,masodik + str(self.id) + harmadik, str(self.id) + " " + sorszamu + ' <tesztemailepuzbau@gmail.com>',[self.kapcsolattarto_email],fail_silently=False,)
 			AllapotValtozas.objects.create(hiba=self, uj_statusz = self.statusz) #allapotvaltozas objektum elkeszitese
 		super(Hiba, self).save(force_insert, force_update, *args, **kwargs)
 		self.__original_statusz = self.statusz
@@ -65,7 +65,7 @@ class AllapotValtozas(models.Model):
     )
 	uj_statusz = models.CharField(max_length=1, choices=hiba_allapot, blank=True, default='f', help_text='Hiba Allapot')
 	valtozas_datuma=models.DateTimeField(default=datetime.utcnow, blank=True)
-	
+
 	def save(self, force_insert=False, force_update=False, *args, **kwargs):
 		self.hiba.allapotvaltozasok_szama = self.hiba.allapotvaltozasok_szama + 1
 		super(AllapotValtozas, self).save(force_insert, force_update, *args, **kwargs)
@@ -83,14 +83,15 @@ class Visszajelzes(models.Model):
 
     def __str__(self):
         if self.hiba:
-            return str(self.hiba.id).encode('UTF-8') + " -- " + (self.uzenet).encode('UTF-8')
+            return str(self.hiba.id) + " -- " + str(self.uzenet)
         else:
-            return (self.uzenet).encode('UTF-8')
+            return str(self.uzenet)
+
 
     def save(self):
         elso = "sorszámu hiba"
         masodik = "A "
         harmadik = " sorszámon bejelentett hibára visszajelzés érkezett, megtekintheti  www.kincstarhibabejelento.hu webcímen üzemelő hibabejelentő felületen. Ez egy automatikus üzenet, kérjük erre ne válaszoljon.  Tisztelettel: Ép-Üz-Bau Kft"
         sorszamu = "sorszámú hibabejelentésére visszajelzés érkezett"
-        send_mail(str(self.hiba.id).decode('utf-8') + " " + elso.decode('utf-8'),masodik.decode('utf-8') + str(self.hiba.id).decode('utf-8') + harmadik.decode('utf-8'), str(self.hiba.id).decode('utf-8') + " " + sorszamu.decode('utf-8') + ' <tesztemailepuzbau@gmail.com>',[self.hiba.kapcsolattarto_email],fail_silently=False,)
-        super(Visszajelzes, self).save() # Call the "real" save() method    
+        send_mail(str(self.hiba.id) + " " + elso,masodik + str(self.hiba.id) + harmadik, str(self.hiba.id) + " " + sorszamu + ' <tesztemailepuzbau@gmail.com>',[self.hiba.kapcsolattarto_email],fail_silently=False,)
+        super(Visszajelzes, self).save() # Call the "real" save() method
